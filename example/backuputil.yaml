@@ -1,0 +1,59 @@
+# Example Target Configuration File
+# ---------------------------------------
+
+# The "targets" key corresponds to a dictionary of "target specifications" where
+# each target specification is given a unique name and contains the information
+# relevant to a backup sequence.
+targets:
+  # ----- Remote Example -----
+  user_files:
+    # (optional) The certificate to use for validating the remote server
+    # identity. Defaults to the value of "--cert-path".
+    cert_path: "~/.ssh/backuputil.pem"
+    # The destination path corresponding the remote borg repo.
+    dst_path: "/borg/storage.example.com/user_files"
+    # The hostname or IP of the destination server. The inclusion of this key is
+    # what the script uses to identify this as a "remote" backup, as opposed to
+    # a "local" one.
+    dst_srv: "backup-server.example.com"
+    # (optional) A list of paths to exclude from the backup process.
+    exclude:
+      - "/var/lib/user-files/foo"
+      - "/var/lib/user-files/bar"
+    # (optional) The archive pruning configuration, as a dictionary of time
+    # slices, where each item corresponds to the "number of [slice] backups to
+    # keep". Possible keys: "hourly", "daily", "weekly", "monthly", "yearly"
+    keep:
+      daily: 7
+      weekly: 4
+      monthly: 6
+    # (potentially optional) The password to use when connecting to the remote
+    # server. Defaults to the value of "--password".
+    password: "SOME PASSWORD"
+    # (optional) The rate limit (in KiB/s) to use during the transfer (where 0 =
+    # no limit). Defaults to the value of "--rate-limit".
+    rate_limit: 1024
+    # The source path (or list of source paths) of the content to back-up.
+    src_path: "/var/lib/user-files"
+    # (optional) The user to use when connecting to the remote server. Defaults
+    # to the value of "--user".
+    user: "root"
+
+  # ----- Local Example -----
+  home:
+    dst_path: "/backup/home"
+    keep:
+      daily: 7
+      weekly: 4
+      monthly: 6
+    # Wildcard paths are also supported:
+    src_path: "~/*"
+
+  # ----- Used by Jenkins for Testing -----
+  jenkins:
+    dst_path: "backup"
+    keep:
+      daily: 7
+      weekly: 4
+      monthly: 6
+    src_path: "example"
